@@ -4,6 +4,8 @@ from django.core.files.storage import FileSystemStorage
 
 from uploads.core.models import Document
 from uploads.core.forms import DocumentForm
+from django.http import JsonResponse
+from django.core import serializers
 
 import json
 import random
@@ -64,5 +66,28 @@ def simple_upload(request):
         })
     return render(request, 'core/simple_upload.html')
 
+def Ichord(request):
+    if request.method == 'POST' and request.FILES['myfile']:
+        myfile = request.FILES['myfile']
+        df = pd.read_csv(myfile)
+        df1 = pd.DataFrame({"name": df.columns, "color": randomColor(len(df.columns))})
+        names = [{k: df1.values[i][v] for v, k in enumerate(df1.columns)} for i in range(len(df1))]
+        #names = list(df.columns)
+        names_json = json.dumps(names,ensure_ascii= False).encode('utf8')
+
+        matrix = df.values.tolist()
+        matrix_json = json.dumps(matrix)
+        return render(request, 'core/IntChord.html', {
+            'matrix_json': matrix_json,
+            'names_json': names_json
+        })
+    return render(request, 'core/simple_upload.html')
 
 
+def randomColor(n):
+    color = ["#"+''.join([random.choice('0123456789ABCDEF') for j in range(6)])
+             for i in range(n)]
+    return color
+
+#clist = ["#000000","#800000","#008000","#808000","#000080","#800080","#008080","#c0c0c0","#808080","#ff0000","#00ff00","#ffff00","#0000ff","#ff00ff","#00ffff","#ffaf00","#ffd7d7","#d1fde9","#B10DC9","#FF4136","#4f45c0","#ffff66","#c4c1ea","#00cccc","#7c9d45","#57389f"]
+#color= random.sample(clist, 15)

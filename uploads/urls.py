@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^uploads/form/$', views.model_form_upload, name='model_form_upload'),
     url(r'^d3/bar/$', views.d3_data, name='d3_data'),
     url(r'^d3/chord/$', views.chordPlot, name='chordPlot'),
+    url(r'^d3/Ichord/$', views.Ichord, name='Ichord'),
     url(r'^admin/', admin.site.urls),
 ]
 
